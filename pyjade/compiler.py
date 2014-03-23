@@ -36,15 +36,22 @@ class Compiler(object):
       , 'sup'
     ]
     selfClosing = [
-        'meta'
-      , 'img'
-      , 'link'
-      , 'input'
-      , 'area'
+        'area'
       , 'base'
-      , 'col'
       , 'br'
+      , 'col'
+      , 'embed'
       , 'hr'
+      , 'img'
+      , 'input'
+      , 'keygen'
+      , 'link'
+      , 'menuitem'
+      , 'meta'
+      , 'param'
+      , 'source'
+      , 'track'
+      , 'wbr'
     ]
     autocloseCode = 'if,for,block,filter,autoescape,with,trans,spaceless,comment,cache,macro,localize,compress'.split(',')
 
