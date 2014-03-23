@@ -34,7 +34,6 @@ class Compiler(object):
       , 'strong'
       , 'sub'
       , 'sup'
-      , 'textarea'
     ]
     selfClosing = [
         'meta'
