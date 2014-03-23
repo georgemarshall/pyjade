@@ -1,6 +1,6 @@
 from __future__ import absolute_import
-import re
 from collections import deque
+import re
 import six
 
 
@@ -251,7 +251,7 @@ class Lexer(object):
     #     captures = regexec(self.RE_WHILE,self.input)
     #     if captures:
     #         self.consume(len(captures[0]))
-    #         return self.tok('code','while(%s)'%captures[1])
+    #         return self.tok('code', 'while({0})'.format(captures[1]))
 
     def each(self):
         captures = regexec(self.RE_EACH, self.input)
@@ -270,7 +270,7 @@ class Lexer(object):
             tok = self.tok('code', name)
             tok.escape = flags.startswith('=')
             #print captures
-            tok.buffer = '=' in flags 
+            tok.buffer = '=' in flags
             # print tok.buffer
             return tok
 
@@ -279,7 +279,7 @@ class Lexer(object):
             index = self.indexOfDelimiters('(', ')')
             string = self.input[1:index]
             tok = self.tok('attrs')
-            l = len(string)
+            # l = len(string)
             colons = self.colons
             states = ['key']
 
@@ -302,7 +302,7 @@ class Lexer(object):
                 return states[-1]
 
             def interpolate(attr):
-                attr, num = self.RE_ATTR_INTERPOLATE.subn(lambda matchobj: '%s+%s+%s' % (ns.quote, matchobj.group(1), ns.quote), attr)
+                attr, num = self.RE_ATTR_INTERPOLATE.subn(lambda matchobj: '{0}+{1}+{0}'.format(ns.quote, matchobj.group(1)), attr)
                 return attr, (num > 0)
 
             self.consume(index + 1)
@@ -311,6 +311,7 @@ class Lexer(object):
             tok.static_attrs = set()
             str_nums = list(map(str, range(10)))
             # print '------'
+
             def parse(c):
                 real = c
                 if colons and ':' == c:

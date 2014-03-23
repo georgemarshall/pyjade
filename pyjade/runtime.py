@@ -1,14 +1,13 @@
 from __future__ import absolute_import
-from .utils import odict
-import types
-import six
 from itertools import chain
+import six
 
 try:
     from collections import Mapping as MappingType
 except ImportError:
     import UserDict
     MappingType = (UserDict.UserDict, UserDict.DictMixin, dict)
+
 
 def flatten(l, ltypes=(list, tuple)):
     ltype = type(l)
@@ -25,6 +24,7 @@ def flatten(l, ltypes=(list, tuple)):
         i += 1
     return ltype(l)
 
+
 def escape(s):
     """Convert the characters &, <, >, ' and " in string s to HTML-safe
     sequences.  Use this if you need to display text that might contain
@@ -39,27 +39,23 @@ def escape(s):
     else:
         s = str(s)
 
-    return (s
-        .replace('&', '&amp;')
-        .replace('>', '&gt;')
-        .replace('<', '&lt;')
-        .replace("'", '&#39;')
-        .replace('"', '&#34;')
-    )
+    return s.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace('"', '&quot;').replace("'", '&#39;')
 
-def attrs (attrs=[],terse=False, undefined=None):
+
+def attrs(attrs=[], terse=False, undefined=None):
     buf = []
     if bool(attrs):
         buf.append(u'')
-        for k,v in attrs:
+        for k, v in attrs:
             if undefined is not None and isinstance(v, undefined):
                 continue
-            if v!=None and (v!=False or type(v)!=bool):
-                if k=='class' and isinstance(v, (list, tuple)):
-                    v = u' '.join(map(str,flatten(v)))
-                t = v==True and type(v)==bool
-                if t and not terse: v=k
-                buf.append(u'%s'%k if terse and t else u'%s="%s"'%(k,escape(v)))
+            if v is not None and (v is not False or type(v) != bool):
+                if k == 'class' and isinstance(v, (list, tuple)):
+                    v = u' '.join(map(str, flatten(v)))
+                t = v is True and type(v) == bool
+                if t and not terse:
+                    v = k
+                buf.append(u'%s' % k if terse and t else u'%s="%s"' % (k, escape(v)))
     return u' '.join(buf)
 
 

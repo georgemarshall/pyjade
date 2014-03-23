@@ -1,14 +1,10 @@
 from __future__ import absolute_import
-try:
-    from itertools import izip, imap
-except:
-    izip, imap = zip, map
 from copy import deepcopy
+from six.moves import zip, map
 import six
 
-from .compiler import Compiler
-
 missing = object()
+
 
 class odict(dict):
     """
@@ -28,7 +24,7 @@ class odict(dict):
     >>> d.update({'foo': 'bar'})
     >>> d
     odict.odict([('a', 'b'), ('c', 'd'), ('foo', 'bar')])
-    
+
     Keep in mind that when updating from dict-literals the order is not
     preserved as these dicts are unsorted!
 
@@ -77,7 +73,7 @@ class odict(dict):
     >>> d.reverse()
     >>> d
     odict.odict([('spam', []), ('foo', 'bar'), ('c', 'd'), ('a', 'b')])
-    
+
     And sort it like a list:
 
     >>> d.sort(key=lambda x: x[0].lower())
@@ -155,7 +151,7 @@ class odict(dict):
         return list(zip(self._keys, self.values()))
 
     def iteritems(self):
-        return izip(self._keys, self.itervalues())
+        return zip(self._keys, self.itervalues())
 
     def keys(self):
         return self._keys[:]
@@ -199,7 +195,7 @@ class odict(dict):
         return list(map(self.get, self._keys))
 
     def itervalues(self):
-        return imap(self.get, self._keys)
+        return map(self.get, self._keys)
 
     def index(self, item):
         return self._keys.index(item)
@@ -223,8 +219,9 @@ class odict(dict):
 from .parser import Parser
 from .ext.html import HTMLCompiler
 
-def process(src,filename=None,parser=Parser,compiler=HTMLCompiler, **kwargs):
-    _parser = parser(src,filename=filename)
+
+def process(src, filename=None, parser=Parser, compiler=HTMLCompiler, **kwargs):
+    _parser = parser(src, filename=filename)
     block = _parser.parse()
     _compiler = compiler(block, **kwargs)
     return _compiler.compile().strip()

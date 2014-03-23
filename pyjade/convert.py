@@ -1,16 +1,17 @@
 from __future__ import print_function
-import logging
-import codecs
 from optparse import OptionParser
 from pyjade.utils import process
+import codecs
+import logging
 import os
+
 
 def convert_file():
     support_compilers_list = ['django', 'jinja', 'underscore', 'mako', 'tornado']
     available_compilers = {}
     for i in support_compilers_list:
         try:
-            compiler_class = __import__('pyjade.ext.%s' % i, fromlist=['pyjade']).Compiler
+            compiler_class = __import__('pyjade.ext.{0}'.format(i), fromlist=['pyjade']).Compiler
         except ImportError as e:
             logging.warning(e)
         else:
@@ -19,16 +20,16 @@ def convert_file():
     usage = "usage: %prog [options] file [output]"
     parser = OptionParser(usage)
     parser.add_option("-o", "--output", dest="output",
-                    help="Write output to FILE", metavar="FILE")
+                      help="Write output to FILE", metavar="FILE")
     # use a default compiler here to sidestep making a particular
     # compiler absolutely necessary (ex. django)
     default_compiler = sorted(available_compilers.keys())[0]
     parser.add_option("-c", "--compiler", dest="compiler",
-                    choices=list(available_compilers.keys()),
-                    default=default_compiler,
-                    type="choice",
-                    help=("COMPILER must be one of %s, default is %s" %
-                          (','.join(list(available_compilers.keys())), default_compiler)))
+                      choices=list(available_compilers.keys()),
+                      default=default_compiler,
+                      type="choice",
+                      help=("COMPILER must be one of {0}, default is {1}"
+                            .format(','.join(list(available_compilers.keys())), default_compiler)))
     parser.add_option("-e", "--ext", dest="extension",
                       help="Set import/extends default file extension",
                       metavar="FILE")
@@ -41,7 +42,7 @@ def convert_file():
     compiler = options.compiler
 
     if options.extension:
-        extension = '.%s' % options.extension
+        extension = '.{0}'.format(options.extension)
     elif options.output:
         extension = os.path.splitext(options.output)[1]
     else:
@@ -57,7 +58,7 @@ def convert_file():
         else:
             print(output)
     else:
-        raise Exception('You must have %s installed!' % compiler)
+        raise Exception('You must have {0} installed!'.format(compiler))
 
 if __name__ == '__main__':
     convert_file()
